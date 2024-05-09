@@ -1,0 +1,25 @@
+name: Enviar Notificação pelo WhatsApp
+
+on:
+  push:
+    branches:
+      - main  # Defina a branch que deseja monitorar
+
+jobs:
+  send_whatsapp_message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v2
+
+      - name: Enviar Notificação pelo WhatsApp
+        run: |
+          curl -X POST \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer ${{ secrets.WA_TOKEN }}" \
+          -H "DeviceToken: ${{ secrets.WA_DEVICE_TOKEN }}" \
+          -d '{
+                "number": "${{ secrets.WA_NUMBER_YOU_RECEIVE}}",
+                "text": "Menssagem aqui"
+              }' \
+          https://cluster.apigratis.com/api/v2/whatsapp/sendText
