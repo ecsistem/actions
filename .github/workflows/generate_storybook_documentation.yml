@@ -1,0 +1,26 @@
+name: Generate Storybook Documentation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate_documentation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate Storybook documentation
+        run: npm run storybook:build
+
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./storybook-static
