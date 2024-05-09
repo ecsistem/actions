@@ -1,0 +1,26 @@
+name: WhatsApp Notification
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  send_notification:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Send WhatsApp notification
+        env:
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          TWILIO_WHATSAPP_NUMBER: ${{ secrets.TWILIO_WHATSAPP_NUMBER }}
+        run: |
+          curl -XPOST https://api.twilio.com/2010-04-01/Accounts/$TWILIO_ACCOUNT_SID/Messages.json \
+          -d "To=whatsapp:$TWILIO_WHATSAPP_NUMBER" \
+          -d "From=whatsapp:$TWILIO_WHATSAPP_NUMBER" \
+          -d "Body=Your message here" \
+          -u $TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN
