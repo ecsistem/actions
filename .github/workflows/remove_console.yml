@@ -1,0 +1,20 @@
+name: Remove Console Logs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  remove_console_logs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install UglifyJS
+        run: npm install -g uglify-js
+
+      - name: Remove console logs
+        run: uglifyjs src/ --output dist/ --compress 'drop_console=true' --mangle --recursive
